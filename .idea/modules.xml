@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/后台/admin/admin.iml" filepath="$PROJECT_DIR$/后台/admin/admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/common/common.iml" filepath="$PROJECT_DIR$/后台/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/csc-oj-master.iml" filepath="$PROJECT_DIR$/.idea/csc-oj-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/framework/framework.iml" filepath="$PROJECT_DIR$/后台/framework/framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/generator/generator.iml" filepath="$PROJECT_DIR$/后台/generator/generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/oj.iml" filepath="$PROJECT_DIR$/后台/oj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/oj-manage/oj-manage.iml" filepath="$PROJECT_DIR$/后台/oj-manage/oj-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/quartz/quartz.iml" filepath="$PROJECT_DIR$/后台/quartz/quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/后台/system/system.iml" filepath="$PROJECT_DIR$/后台/system/system.iml" />
+    </modules>
+  </component>
+</project>

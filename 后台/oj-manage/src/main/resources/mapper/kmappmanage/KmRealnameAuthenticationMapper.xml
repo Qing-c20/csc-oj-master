@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmRealnameAuthenticationMapper">
+    
+    <resultMap type="RealnameAuthentication" id="KmRealnameAuthenticationResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="studentno"    column="studentno"    />
+        <result property="image"    column="image"    />
+        <result property="realname"    column="realname"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="status"    column="status"    />
+        <result property="rejectReason"    column="reject_reason"    />
+        <result property="passTime"    column="pass_time"    />
+    </resultMap>
+
+    <sql id="selectKmRealnameAuthenticationVo">
+        select id, user_id, studentno, image, realname, card_id, status, reject_reason, pass_time from realname_authentication
+    </sql>
+
+    <select id="selectKmRealnameAuthenticationList" parameterType="RealnameAuthentication" resultMap="KmRealnameAuthenticationResult">
+        <include refid="selectKmRealnameAuthenticationVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="studentno != null  and studentno != ''"> and studentno = #{studentno}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="cardId != null  and cardId != ''"> and card_id = #{cardId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="rejectReason != null  and rejectReason != ''"> and reject_reason = #{rejectReason}</if>
+            <if test="passTime != null "> and pass_time = #{passTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmRealnameAuthenticationById" parameterType="Long" resultMap="KmRealnameAuthenticationResult">
+        <include refid="selectKmRealnameAuthenticationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmRealnameAuthentication" parameterType="RealnameAuthentication" useGeneratedKeys="true" keyProperty="id">
+        insert into realname_authentication
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="studentno != null and studentno != ''">studentno,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="realname != null and realname != ''">realname,</if>
+            <if test="cardId != null">card_id,</if>
+            <if test="status != null">status,</if>
+            <if test="rejectReason != null and rejectReason != ''">reject_reason,</if>
+            <if test="passTime != null">pass_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="studentno != null and studentno != ''">#{studentno},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="realname != null and realname != ''">#{realname},</if>
+            <if test="cardId != null">#{cardId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="rejectReason != null and rejectReason != ''">#{rejectReason},</if>
+            <if test="passTime != null">#{passTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmRealnameAuthentication" parameterType="RealnameAuthentication">
+        update realname_authentication
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="studentno != null and studentno != ''">studentno = #{studentno},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="realname != null and realname != ''">realname = #{realname},</if>
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="rejectReason != null and rejectReason != ''">reject_reason = #{rejectReason},</if>
+            <if test="passTime != null">pass_time = #{passTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmRealnameAuthenticationById" parameterType="Long">
+        delete from realname_authentication where id = #{id}
+    </delete>
+
+    <delete id="deleteKmRealnameAuthenticationByIds" parameterType="String">
+        delete from realname_authentication where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

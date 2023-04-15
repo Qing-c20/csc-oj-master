@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmDictMapper">
+    
+    <resultMap type="Dict" id="KmDictResult">
+        <result property="id"    column="id"    />
+        <result property="k"    column="k"    />
+        <result property="v"    column="v"    />
+    </resultMap>
+
+    <sql id="selectKmDictVo">
+        select id, k, v from dict
+    </sql>
+
+    <select id="selectKmDictList" parameterType="Dict" resultMap="KmDictResult">
+        <include refid="selectKmDictVo"/>
+        <where>  
+            <if test="k != null  and k != ''"> and k = #{k}</if>
+            <if test="v != null  and v != ''"> and v = #{v}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmDictById" parameterType="Long" resultMap="KmDictResult">
+        <include refid="selectKmDictVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmDict" parameterType="Dict" useGeneratedKeys="true" keyProperty="id">
+        insert into dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="k != null and k != ''">k,</if>
+            <if test="v != null and v != ''">v,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="k != null and k != ''">#{k},</if>
+            <if test="v != null and v != ''">#{v},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmDict" parameterType="Dict">
+        update dict
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="k != null and k != ''">k = #{k},</if>
+            <if test="v != null and v != ''">v = #{v},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmDictById" parameterType="Long">
+        delete from km_dict where id = #{id}
+    </delete>
+
+    <delete id="deleteKmDictByIds" parameterType="String">
+        delete from dict where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

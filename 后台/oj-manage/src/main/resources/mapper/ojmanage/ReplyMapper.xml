@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.ReplyMapper">
+    
+    <resultMap type="Reply" id="ReplyResult">
+        <result property="replyId"    column="reply_id"    />
+        <result property="discussionId"    column="discussion_id"    />
+        <result property="discussionTopic"    column="discussion_topic"    />
+        <result property="userId"    column="user_id"    />
+        <result property="replyContent"    column="reply_content"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectReplyVo">
+        select reply_id, discussion_id, discussion_topic, user_id, reply_content, parent_id, create_time, state from reply
+    </sql>
+
+    <select id="selectReplyList" parameterType="Reply" resultMap="ReplyResult">
+        <include refid="selectReplyVo"/>
+        <where>  
+            <if test="discussionId != null "> and discussion_id = #{discussionId}</if>
+            <if test="discussionTopic != null  and discussionTopic != ''"> and discussion_topic = #{discussionTopic}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="replyContent != null  and replyContent != ''"> and reply_content = #{replyContent}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="state != null "> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectReplyByReplyId" parameterType="Long" resultMap="ReplyResult">
+        <include refid="selectReplyVo"/>
+        where reply_id = #{replyId}
+    </select>
+        
+    <insert id="insertReply" parameterType="Reply" useGeneratedKeys="true" keyProperty="replyId">
+        insert into reply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="discussionId != null">discussion_id,</if>
+            <if test="discussionTopic != null">discussion_topic,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="replyContent != null">reply_content,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="discussionId != null">#{discussionId},</if>
+            <if test="discussionTopic != null">#{discussionTopic},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="replyContent != null">#{replyContent},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReply" parameterType="Reply">
+        update reply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="discussionId != null">discussion_id = #{discussionId},</if>
+            <if test="discussionTopic != null">discussion_topic = #{discussionTopic},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="replyContent != null">reply_content = #{replyContent},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where reply_id = #{replyId}
+    </update>
+
+    <delete id="deleteReplyByReplyId" parameterType="Long">
+        delete from reply where reply_id = #{replyId}
+    </delete>
+
+    <delete id="deleteReplyByReplyIds" parameterType="String">
+        delete from reply where reply_id in 
+        <foreach item="replyId" collection="array" open="(" separator="," close=")">
+            #{replyId}
+        </foreach>
+    </delete>
+</mapper>

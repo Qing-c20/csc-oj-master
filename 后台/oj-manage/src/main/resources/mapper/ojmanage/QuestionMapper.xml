@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.QuestionMapper">
+    
+    <resultMap type="Question" id="QuestionResult">
+        <result property="id"    column="id"    />
+        <result property="topic"    column="topic"    />
+        <result property="inputFormat"    column="input_format"    />
+        <result property="outputFormat"    column="output_format"    />
+        <result property="dataField"    column="data_field"    />
+        <result property="sampleInput"    column="sample_input"    />
+        <result property="sampleOutput"    column="sample_output"    />
+        <result property="standardInput"    column="standard_input"    />
+        <result property="standardOutput"    column="standard_output"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modificationTime"    column="modification_time"    />
+        <result property="difficulty"    column="difficulty"    />
+        <result property="limitation"    column="limitation"    />
+        <result property="passSum"    column="pass_sum"    />
+        <result property="trySum"    column="try_sum"    />
+        <result property="source"    column="source"    />
+        <result property="label"    column="label"    />
+        <result property="founder"    column="founder"    />
+    </resultMap>
+
+    <sql id="selectQuestionVo">
+        select id, topic, input_format, output_format, data_field, sample_input, sample_output, standard_input, standard_output, create_time, modification_time, difficulty, limitation, pass_sum, try_sum, source, label, founder from question
+    </sql>
+
+    <select id="selectQuestionList" parameterType="Question" resultMap="QuestionResult">
+        <include refid="selectQuestionVo"/>
+        <where>  
+            <if test="topic != null  and topic != ''"> and topic = #{topic}</if>
+            <if test="inputFormat != null  and inputFormat != ''"> and input_format = #{inputFormat}</if>
+            <if test="outputFormat != null  and outputFormat != ''"> and output_format = #{outputFormat}</if>
+            <if test="dataField != null  and dataField != ''"> and data_field = #{dataField}</if>
+            <if test="sampleInput != null  and sampleInput != ''"> and sample_input = #{sampleInput}</if>
+            <if test="sampleOutput != null  and sampleOutput != ''"> and sample_output = #{sampleOutput}</if>
+            <if test="standardInput != null  and standardInput != ''"> and standard_input = #{standardInput}</if>
+            <if test="standardOutput != null  and standardOutput != ''"> and standard_output = #{standardOutput}</if>
+            <if test="modificationTime != null "> and modification_time = #{modificationTime}</if>
+            <if test="difficulty != null  and difficulty != ''"> and difficulty = #{difficulty}</if>
+            <if test="limitation != null  and limitation != ''"> and limitation = #{limitation}</if>
+            <if test="passSum != null "> and pass_sum = #{passSum}</if>
+            <if test="trySum != null "> and try_sum = #{trySum}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="label != null  and label != ''"> and label = #{label}</if>
+            <if test="founder != null  and founder != ''"> and founder = #{founder}</if>
+        </where>
+    </select>
+    
+    <select id="selectQuestionById" parameterType="Long" resultMap="QuestionResult">
+        <include refid="selectQuestionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertQuestion" parameterType="Question">
+        insert into question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="topic != null and topic != ''">topic,</if>
+            <if test="inputFormat != null and inputFormat != ''">input_format,</if>
+            <if test="outputFormat != null and outputFormat != ''">output_format,</if>
+            <if test="dataField != null and dataField != ''">data_field,</if>
+            <if test="sampleInput != null and sampleInput != ''">sample_input,</if>
+            <if test="sampleOutput != null and sampleOutput != ''">sample_output,</if>
+            <if test="standardInput != null and standardInput != ''">standard_input,</if>
+            <if test="standardOutput != null and standardOutput != ''">standard_output,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modificationTime != null">modification_time,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="limitation != null">limitation,</if>
+            <if test="passSum != null">pass_sum,</if>
+            <if test="trySum != null">try_sum,</if>
+            <if test="source != null">source,</if>
+            <if test="label != null">label,</if>
+            <if test="founder != null">founder,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="topic != null and topic != ''">#{topic},</if>
+            <if test="inputFormat != null and inputFormat != ''">#{inputFormat},</if>
+            <if test="outputFormat != null and outputFormat != ''">#{outputFormat},</if>
+            <if test="dataField != null and dataField != ''">#{dataField},</if>
+            <if test="sampleInput != null and sampleInput != ''">#{sampleInput},</if>
+            <if test="sampleOutput != null and sampleOutput != ''">#{sampleOutput},</if>
+            <if test="standardInput != null and standardInput != ''">#{standardInput},</if>
+            <if test="standardOutput != null and standardOutput != ''">#{standardOutput},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modificationTime != null">#{modificationTime},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="limitation != null">#{limitation},</if>
+            <if test="passSum != null">#{passSum},</if>
+            <if test="trySum != null">#{trySum},</if>
+            <if test="source != null">#{source},</if>
+            <if test="label != null">#{label},</if>
+            <if test="founder != null">#{founder},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQuestion" parameterType="Question">
+        update question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="topic != null and topic != ''">topic = #{topic},</if>
+            <if test="inputFormat != null and inputFormat != ''">input_format = #{inputFormat},</if>
+            <if test="outputFormat != null and outputFormat != ''">output_format = #{outputFormat},</if>
+            <if test="dataField != null and dataField != ''">data_field = #{dataField},</if>
+            <if test="sampleInput != null and sampleInput != ''">sample_input = #{sampleInput},</if>
+            <if test="sampleOutput != null and sampleOutput != ''">sample_output = #{sampleOutput},</if>
+            <if test="standardInput != null and standardInput != ''">standard_input = #{standardInput},</if>
+            <if test="standardOutput != null and standardOutput != ''">standard_output = #{standardOutput},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="modificationTime != null">modification_time = #{modificationTime},</if>
+            <if test="difficulty != null">difficulty = #{difficulty},</if>
+            <if test="limitation != null">limitation = #{limitation},</if>
+            <if test="passSum != null">pass_sum = #{passSum},</if>
+            <if test="trySum != null">try_sum = #{trySum},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="label != null">label = #{label},</if>
+            <if test="founder != null">founder = #{founder},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQuestionById" parameterType="Long">
+        delete from question where id = #{id}
+    </delete>
+
+    <delete id="deleteQuestionByIds" parameterType="String">
+        delete from question where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

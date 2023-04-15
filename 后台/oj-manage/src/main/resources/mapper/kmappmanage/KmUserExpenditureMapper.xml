@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmUserExpenditureMapper">
+    
+    <resultMap type="UserExpenditure" id="KmUserExpenditureResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="comment"    column="comment"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="color"    column="color"    />
+    </resultMap>
+
+    <sql id="selectKmUserExpenditureVo">
+        select id, user_id, amount, comment, create_time, color from user_expenditure
+    </sql>
+
+    <select id="selectKmUserExpenditureList" parameterType="UserExpenditure" resultMap="KmUserExpenditureResult">
+        <include refid="selectKmUserExpenditureVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="comment != null  and comment != ''"> and comment = #{comment}</if>
+            <if test="color != null  and color != ''"> and color = #{color}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmUserExpenditureById" parameterType="Long" resultMap="KmUserExpenditureResult">
+        <include refid="selectKmUserExpenditureVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmUserExpenditure" parameterType="UserExpenditure" useGeneratedKeys="true" keyProperty="id">
+        insert into user_expenditure
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="amount != null">amount,</if>
+            <if test="comment != null">comment,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="color != null">color,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="color != null">#{color},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmUserExpenditure" parameterType="UserExpenditure">
+        update user_expenditure
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="color != null">color = #{color},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmUserExpenditureById" parameterType="Long">
+        delete from user_expenditure where id = #{id}
+    </delete>
+
+    <delete id="deleteKmUserExpenditureByIds" parameterType="String">
+        delete from user_expenditure where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

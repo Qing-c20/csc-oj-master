@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmOrderMapper">
+    
+    <resultMap type="Orders" id="KmOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="userId"    column="user_id"    />
+        <result property="payment"    column="payment"    />
+        <result property="paymentType"    column="payment_type"    />
+        <result property="status"    column="status"    />
+        <result property="statusColor"    column="status_color"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="closeTime"    column="close_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="subject"    column="subject"    />
+        <result property="body"    column="body"    />
+    </resultMap>
+
+    <sql id="selectKmOrderVo">
+        select id, order_no, user_id, payment, payment_type, status, status_color, create_time, pay_time, close_time, end_time, subject, body from orders
+    </sql>
+
+    <select id="selectKmOrderList" parameterType="Orders" resultMap="KmOrderResult">
+        <include refid="selectKmOrderVo"/>
+        <where>  
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="payment != null "> and payment = #{payment}</if>
+            <if test="paymentType != null "> and payment_type = #{paymentType}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="statusColor != null "> and status_color = #{statusColor}</if>
+            <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+            <if test="payTime != null  and payTime != ''"> and pay_time = #{payTime}</if>
+            <if test="closeTime != null  and closeTime != ''"> and close_time = #{closeTime}</if>
+            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+            <if test="body != null  and body != ''"> and body = #{body}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmOrderById" parameterType="Long" resultMap="KmOrderResult">
+        <include refid="selectKmOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmOrder" parameterType="Orders" useGeneratedKeys="true" keyProperty="id">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="payment != null">payment,</if>
+            <if test="paymentType != null">payment_type,</if>
+            <if test="status != null">status,</if>
+            <if test="statusColor != null">status_color,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="closeTime != null">close_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="subject != null">subject,</if>
+            <if test="body != null">body,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="payment != null">#{payment},</if>
+            <if test="paymentType != null">#{paymentType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="statusColor != null">#{statusColor},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="closeTime != null">#{closeTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="body != null">#{body},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmOrder" parameterType="Orders">
+        update orders
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="payment != null">payment = #{payment},</if>
+            <if test="paymentType != null">payment_type = #{paymentType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="statusColor != null">status_color = #{statusColor},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="closeTime != null">close_time = #{closeTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="body != null">body = #{body},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmOrderById" parameterType="Long">
+        delete from orders where id = #{id}
+    </delete>
+
+    <delete id="deleteKmOrderByIds" parameterType="String">
+        delete from orders where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

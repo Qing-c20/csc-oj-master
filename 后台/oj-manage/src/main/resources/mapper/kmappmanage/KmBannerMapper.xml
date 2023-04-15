@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmBannerMapper">
+    
+    <resultMap type="Banner" id="KmBannerResult">
+        <result property="id"    column="id"    />
+        <result property="img"    column="img"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+        <result property="comment"    column="comment"    />
+    </resultMap>
+
+    <sql id="selectKmBannerVo">
+        select id, img, create_time, status, comment from banner
+    </sql>
+
+    <select id="selectKmBannerList" parameterType="Banner" resultMap="KmBannerResult">
+        <include refid="selectKmBannerVo"/>
+        <where>  
+            <if test="status != null "> and status = #{status}</if>
+            <if test="comment != null  and comment != ''"> and comment = #{comment}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmBannerById" parameterType="Long" resultMap="KmBannerResult">
+        <include refid="selectKmBannerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmBanner" parameterType="Banner" useGeneratedKeys="true" keyProperty="id">
+        insert into banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img != null and img != ''">img,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+            <if test="comment != null">comment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img != null and img != ''">#{img},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="comment != null">#{comment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmBanner" parameterType="Banner">
+        update banner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="img != null and img != ''">img = #{img},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="comment != null">comment = #{comment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmBannerById" parameterType="Long">
+        delete from banner where id = #{id}
+    </delete>
+
+    <delete id="deleteKmBannerByIds" parameterType="String">
+        delete from banner where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmAdMapper">
+    
+    <resultMap type="Ad" id="KmAdResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="img"    column="img"    />
+        <result property="username"    column="username"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="address"    column="address"    />
+        <result property="status"    column="status"    />
+        <result property="version"    column="version"    />
+        <result property="tag"    column="tag"    />
+        <result property="rate"    column="rate"    />
+        <result property="content" column="content" />
+    </resultMap>
+
+    <sql id="selectKmAdVo">
+        select id, title, img, username, create_time, end_time, address, status, version, tag, rate from ad
+    </sql>
+
+    <sql id="selectKmAdVo2">
+        select id, title, img, username, create_time, end_time, address, status, version, tag, rate , content from ad
+    </sql>
+
+    <select id="selectKmAdList" parameterType="Ad" resultMap="KmAdResult">
+        <include refid="selectKmAdVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="createTime != null "> and create_time like concat('%', #{createTime}, '%')</if>
+            <if test="endTime != null "> and end_time like concat('%', #{endTime}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="tag != null  and tag != ''"> and tag = #{tag}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmAdById" parameterType="Long" resultMap="KmAdResult">
+        <include refid="selectKmAdVo2"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmAd" parameterType="Ad" useGeneratedKeys="true" keyProperty="id">
+        insert into ad
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="img != null and img != ''">img,</if>
+            <if test="username != null and username != ''">username,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="address != null">address,</if>
+            <if test="status != null">status,</if>
+            <if test="version != null">version,</if>
+            <if test="tag != null and tag != ''">tag,</if>
+            <if test="rate != null">rate,</if>
+            <if test="content != null and content != ''">content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="img != null and img != ''">#{img},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="address != null">#{address},</if>
+            <if test="status != null">#{status},</if>
+            <if test="version != null">#{version},</if>
+            <if test="tag != null and tag != ''">#{tag},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="content != null and content != ''">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmAd" parameterType="Ad">
+        update ad
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="img != null and img != ''">img = #{img},</if>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="tag != null and tag != ''">tag = #{tag},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmAdById" parameterType="Long">
+        delete from ad where id = #{id}
+    </delete>
+
+    <delete id="deleteKmAdByIds" parameterType="String">
+        delete from ad where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

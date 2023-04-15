@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.DiscussionMapper">
+    
+    <resultMap type="Discussion" id="DiscussionResult">
+        <result property="discussionId"    column="discussion_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="discussionTopic"    column="discussion_topic"    />
+        <result property="discussionContent"    column="discussion_content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectDiscussionVo">
+        select discussion_id, user_id, discussion_topic, discussion_content, create_time, state from discussion
+    </sql>
+
+    <select id="selectDiscussionList" parameterType="Discussion" resultMap="DiscussionResult">
+        <include refid="selectDiscussionVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="discussionTopic != null  and discussionTopic != ''"> and discussion_topic = #{discussionTopic}</if>
+            <if test="discussionContent != null  and discussionContent != ''"> and discussion_content = #{discussionContent}</if>
+            <if test="state != null "> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectDiscussionByDiscussionId" parameterType="Long" resultMap="DiscussionResult">
+        <include refid="selectDiscussionVo"/>
+        where discussion_id = #{discussionId}
+    </select>
+        
+    <insert id="insertDiscussion" parameterType="Discussion" useGeneratedKeys="true" keyProperty="discussionId">
+        insert into discussion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="discussionTopic != null">discussion_topic,</if>
+            <if test="discussionContent != null">discussion_content,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="discussionTopic != null">#{discussionTopic},</if>
+            <if test="discussionContent != null">#{discussionContent},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDiscussion" parameterType="Discussion">
+        update discussion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="discussionTopic != null">discussion_topic = #{discussionTopic},</if>
+            <if test="discussionContent != null">discussion_content = #{discussionContent},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where discussion_id = #{discussionId}
+    </update>
+
+    <delete id="deleteDiscussionByDiscussionId" parameterType="Long">
+        delete from discussion where discussion_id = #{discussionId}
+    </delete>
+
+    <delete id="deleteDiscussionByDiscussionIds" parameterType="String">
+        delete from discussion where discussion_id in 
+        <foreach item="discussionId" collection="array" open="(" separator="," close=")">
+            #{discussionId}
+        </foreach>
+    </delete>
+</mapper>

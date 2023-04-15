@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmUserMapper">
+    
+    <resultMap type="Users" id="KmUserResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="gender"    column="gender"    />
+        <result property="status"    column="status"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="password"    column="password"    />
+        <result property="payPassword"    column="pay_password"    />
+        <result property="autograph"    column="autograph"    />
+        <result property="authentication"    column="authentication"    />
+        <result property="realname"    column="realname"    />
+        <result property="balance"    column="balance"    />
+        <result property="invitationCount"    column="invitation_count"    />
+        <result property="invitationUserId"    column="invitation_user_id"    />
+        <result property="studentno"    column="studentno"    />
+        <result property="address"    column="address"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="banTime"    column="ban_time"    />
+    </resultMap>
+
+    <sql id="selectKmUserVo">
+        select id, user_id, email, phone, gender, status, avatar, nickname, password, pay_password, autograph, authentication, realname, balance, invitation_count, invitation_user_id, studentno, address, create_time, ban_time from users
+    </sql>
+
+    <select id="selectKmUserList" parameterType="Users" resultMap="KmUserResult">
+        <include refid="selectKmUserVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="authentication != null  and authentication != ''"> and authentication like concat('%', #{authentication}, '%')</if>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="balance != null "> and balance = #{balance}</if>
+            <if test="invitationCount != null "> and invitation_count = #{invitationCount}</if>
+            <if test="invitationUserId != null  and invitationUserId != ''"> and invitation_user_id = #{invitationUserId}</if>
+            <if test="studentno != null  and studentno != ''"> and studentno = #{studentno}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="banTime != null "> and ban_time = #{banTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmUserById" parameterType="Long" resultMap="KmUserResult">
+        <include refid="selectKmUserVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectKmUserByUserId" parameterType="String" resultMap="KmUserResult">
+        <include refid="selectKmUserVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertKmUser" parameterType="Users" useGeneratedKeys="true" keyProperty="id">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="email != null">email,</if>
+            <if test="phone != null">phone,</if>
+            <if test="gender != null">gender,</if>
+            <if test="status != null">status,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="password != null">password,</if>
+            <if test="payPassword != null">pay_password,</if>
+            <if test="autograph != null">autograph,</if>
+            <if test="authentication != null">authentication,</if>
+            <if test="realname != null">realname,</if>
+            <if test="balance != null">balance,</if>
+            <if test="invitationCount != null">invitation_count,</if>
+            <if test="invitationUserId != null">invitation_user_id,</if>
+            <if test="studentno != null">studentno,</if>
+            <if test="address != null">address,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="banTime != null">ban_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="email != null">#{email},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="status != null">#{status},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="password != null">#{password},</if>
+            <if test="payPassword != null">#{payPassword},</if>
+            <if test="autograph != null">#{autograph},</if>
+            <if test="authentication != null">#{authentication},</if>
+            <if test="realname != null">#{realname},</if>
+            <if test="balance != null">#{balance},</if>
+            <if test="invitationCount != null">#{invitationCount},</if>
+            <if test="invitationUserId != null">#{invitationUserId},</if>
+            <if test="studentno != null">#{studentno},</if>
+            <if test="address != null">#{address},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="banTime != null">#{banTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmUser" parameterType="Users">
+        update users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="payPassword != null">pay_password = #{payPassword},</if>
+            <if test="autograph != null">autograph = #{autograph},</if>
+            <if test="authentication != null">authentication = #{authentication},</if>
+            <if test="realname != null">realname = #{realname},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="invitationCount != null">invitation_count = #{invitationCount},</if>
+            <if test="invitationUserId != null">invitation_user_id = #{invitationUserId},</if>
+            <if test="studentno != null">studentno = #{studentno},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="banTime != null">ban_time = #{banTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmUserById" parameterType="Long">
+        delete from users where id = #{id}
+    </delete>
+
+    <delete id="deleteKmUserByIds" parameterType="String">
+        delete from users where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

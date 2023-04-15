@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oj.csc.mapper.KmSloganMapper">
+    
+    <resultMap type="Slogan" id="KmSloganResult">
+        <result property="id"    column="id"    />
+        <result property="sloganId"    column="slogan_id"    />
+        <result property="content"    column="content"    />
+        <result property="modifyTime"    column="modify_time"    />
+    </resultMap>
+
+    <sql id="selectKmSloganVo">
+        select id, slogan_id, content, modify_time from slogan
+    </sql>
+
+    <select id="selectKmSloganList" parameterType="Slogan" resultMap="KmSloganResult">
+        <include refid="selectKmSloganVo"/>
+        <where>  
+            <if test="sloganId != null  and sloganId != ''"> and slogan_id = #{sloganId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectKmSloganById" parameterType="Long" resultMap="KmSloganResult">
+        <include refid="selectKmSloganVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKmSlogan" parameterType="Slogan" useGeneratedKeys="true" keyProperty="id">
+        insert into slogan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sloganId != null and sloganId != ''">slogan_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="modifyTime != null">modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sloganId != null and sloganId != ''">#{sloganId},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKmSlogan" parameterType="Slogan">
+        update slogan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sloganId != null and sloganId != ''">slogan_id = #{sloganId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmSloganById" parameterType="Long">
+        delete from slogan where id = #{id}
+    </delete>
+
+    <delete id="deleteKmSloganByIds" parameterType="String">
+        delete from slogan where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
